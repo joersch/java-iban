@@ -15,6 +15,7 @@
  */
 package nl.garvelink.iban;
 
+import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Comparator;
 
@@ -24,7 +25,7 @@ import java.util.Comparator;
  * matching the length of the IBAN to its country code. Unknown country codes are not supported.
  * @author Barend Garvelink (barend@garvelink.nl) https://github.com/barend
  */
-public final class IBAN {
+public final class IBAN implements Serializable {
 
     /**
      * A comparator that puts IBAN's into lexicographic ordering, per {@link String#compareTo(String)}.

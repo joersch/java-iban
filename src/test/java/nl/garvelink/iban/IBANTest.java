@@ -17,6 +17,12 @@ package nl.garvelink.iban;
 
 import org.junit.Test;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
 
@@ -94,5 +100,19 @@ public class IBANTest {
     public void testInvalidInputToGetLengthForCountry() {
         assertThat(IBAN.getLengthForCountryCode("nl"), is(-1));
         assertThat(IBAN.getLengthForCountryCode("Bogus"), is(-1));
+    }
+
+    @Test
+    public void testSerialization() throws IOException, ClassNotFoundException {
+        IBAN source = IBAN.parse(VALID_IBAN);
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        ObjectOutputStream oos = new ObjectOutputStream(baos);
+        oos.writeObject(source);
+        byte[] serializedForm = baos.toByteArray();
+        System.out.printf("Length of serialized form: %d (%.2f%% length of IBAN)\n", serializedForm.length, 100.0f * serializedForm.length / VALID_IBAN.length());
+        ByteArrayInputStream bais = new ByteArrayInputStream(serializedForm);
+        ObjectInputStream ois = new ObjectInputStream(bais);
+        IBAN clone = (IBAN) ois.readObject();
+        assertThat(clone, is(equalTo(source)));
     }
 }
