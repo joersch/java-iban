@@ -19,7 +19,10 @@ import org.junit.Test;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InvalidObjectException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
@@ -116,5 +119,26 @@ public class IBANTest {
         assertThat(clone, is(equalTo(source)));
         // The pretty print isn't part of the serialized form, make sure it doesn't nullpointer or anything.
         assertThat(clone.toString(), is(equalTo(source.toString())));
+    }
+
+    /**
+     * Deserializes a stored copy of the serialized form, to protect against breakage due to future changes.
+     */
+    @Test
+    public void testSerializationCompatibility() throws IOException, ClassNotFoundException {
+        InputStream is = IBANTest.class.getResourceAsStream("/IBAN.ser");
+        ObjectInputStream ois = new ObjectInputStream(is);
+        IBAN clone = (IBAN) ois.readObject();
+        assertThat(clone, is(equalTo(IBAN.valueOf(VALID_IBAN))));
+    }
+
+    /**
+     * Deserializes an invalid serialized form, to verify that instance validation occurs.
+     */
+    @Test(expected = InvalidObjectException.class)
+    public void testSerializationEnsuresIntegrity() throws IOException, ClassNotFoundException {
+        InputStream is = IBANTest.class.getResourceAsStream("/IBAN-invalid.ser");
+        ObjectInputStream ois = new ObjectInputStream(is);
+        IBAN clone = (IBAN) ois.readObject();
     }
 }

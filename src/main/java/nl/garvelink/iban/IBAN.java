@@ -15,7 +15,14 @@
  */
 package nl.garvelink.iban;
 
+import java.io.Externalizable;
+import java.io.IOException;
+import java.io.InvalidObjectException;
+import java.io.ObjectInput;
+import java.io.ObjectOutput;
+import java.io.ObjectStreamException;
 import java.io.Serializable;
+import java.nio.charset.Charset;
 import java.util.Arrays;
 import java.util.Comparator;
 
@@ -26,6 +33,7 @@ import java.util.Comparator;
  * @author Barend Garvelink (barend@garvelink.nl) https://github.com/barend
  */
 public final class IBAN implements Serializable {
+    private static final long serialVersionUID = 1L;
 
     /**
      * A comparator that puts IBAN's into lexicographic ordering, per {@link String#compareTo(String)}.
@@ -222,5 +230,50 @@ public final class IBAN implements Serializable {
             sb.append(max - i);
         }
         return sb.toString();
+    }
+
+    private Object writeReplace() throws ObjectStreamException {
+        return new M(value);
+    }
+
+    /**
+     * Memento object for IBAN serialization. This provides a stable serialized form and reduces the byte size of the
+     * serialized form considerably over default serialization. It's still a massive overhead, and if you can, it's
+     * better to avoid serialization entirely and just send the IBAN value directly.
+     */
+    private static class M implements Externalizable {
+        private static final long serialVersionUID = 1L;
+        private String value;
+
+        private M(String value) {
+            this.value = value;
+        }
+
+        public M() {
+            super();
+        }
+
+        @Override
+        public void writeExternal(ObjectOutput out) throws IOException {
+            byte[] ba = value.getBytes(Charset.forName("us-ascii"));
+            out.write(ba.length);
+            out.write(ba);
+        }
+
+        @Override
+        public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
+            int len = in.read();
+            byte[] ba = new byte[len];
+            in.read(ba);
+            value = new String(ba, Charset.forName("us-ascii"));
+        }
+
+        private Object readResolve() throws ObjectStreamException {
+            try {
+                return new IBAN(value);
+            } catch (IllegalArgumentException e) {
+                throw new InvalidObjectException(e.toString());
+            }
+        }
     }
 }
