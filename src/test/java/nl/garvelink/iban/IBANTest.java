@@ -114,5 +114,7 @@ public class IBANTest {
         ObjectInputStream ois = new ObjectInputStream(bais);
         IBAN clone = (IBAN) ois.readObject();
         assertThat(clone, is(equalTo(source)));
+        // The pretty print isn't part of the serialized form, make sure it doesn't nullpointer or anything.
+        assertThat(clone.toString(), is(equalTo(source.toString())));
     }
 }

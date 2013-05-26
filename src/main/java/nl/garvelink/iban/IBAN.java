@@ -60,9 +60,9 @@ public final class IBAN implements Serializable {
     private final String value;
 
     /**
-     * Pretty-printed value.
+     * Pretty-printed value, lazily initialized.
      */
-    private final String valuePretty;
+    private transient String valuePretty;
 
     /**
      * Initializing constructor.
@@ -97,7 +97,6 @@ public final class IBAN implements Serializable {
             throw new WrongChecksumException(value);
         }
         this.value = value;
-        this.valuePretty = prettyPrint(value);
     }
 
     /**
@@ -192,7 +191,13 @@ public final class IBAN implements Serializable {
      */
     @Override
     public String toString() {
-        return valuePretty;
+        // This code is using a non-threadsafe (but still nullsafe) assignment. The prettyPrint() operation is
+        // idempotent, so no harm done if it happens to run more than once. I expect concurrent use to be rare.
+        String vp = valuePretty;
+        if (vp == null) {
+            vp = valuePretty = prettyPrint(value);
+        }
+        return vp;
     }
 
     /**
