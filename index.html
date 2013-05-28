@@ -1,33 +1,36 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
+
   <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="chrome=1">
-    <title>Java-iban by barend</title>
+    <meta charset='utf-8' />
+    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+    <meta name="description" content="Java-iban : An Apache licensed, immutable Java value type for IBAN's." />
 
-    <link rel="stylesheet" href="stylesheets/styles.css">
-    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
-    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
-    <!--[if lt IE 9]>
-    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+
+    <title>Java-iban</title>
   </head>
+
   <body>
-    <div class="wrapper">
-      <header>
-        <h1>Java-iban</h1>
-        <p>An Apache licensed, immutable Java value type for IBAN's.</p>
 
-        <p class="view"><a href="https://github.com/barend/java-iban">View the Project on GitHub <small>barend/java-iban</small></a></p>
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/barend/java-iban">View on GitHub</a>
 
+          <h1 id="project_title">Java-iban</h1>
+          <h2 id="project_tagline">An Apache licensed, immutable Java value type for IBAN's.</h2>
 
-        <ul>
-          <li><a href="https://github.com/barend/java-iban/zipball/master">Download <strong>ZIP File</strong></a></li>
-          <li><a href="https://github.com/barend/java-iban/tarball/master">Download <strong>TAR Ball</strong></a></li>
-          <li><a href="https://github.com/barend/java-iban">View On <strong>GitHub</strong></a></li>
-        </ul>
-      </header>
-      <section>
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/barend/java-iban/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/barend/java-iban/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
         <p>An Apache licensed, immutable Java value type for IBAN's.</p>
 
 <h2>Usage</h2>
@@ -40,7 +43,7 @@
     <span class="n">String</span> <span class="n">p</span> <span class="o">=</span> <span class="n">iban</span><span class="o">.</span><span class="na">toPlainString</span><span class="o">();</span> <span class="c1">// "NL91ABNA0417164300"</span>
 
     <span class="c1">// Input may be formatted.</span>
-    <span class="n">iban</span> <span class="o">=</span> <span class="n">IBAN</span><span class="o">.</span><span class="na">valueOf</span><span class="o">(</span> <span class="s">"NL91 ABNA 0417 1643 00"</span> <span class="o">);</span>
+    <span class="n">iban</span> <span class="o">=</span> <span class="n">IBAN</span><span class="o">.</span><span class="na">valueOf</span><span class="o">(</span> <span class="s">"BE68 5390 0754 7034"</span> <span class="o">);</span>
 
     <span class="c1">// The valueOf() method returns null if its argument is null.</span>
     <span class="n">iban</span> <span class="o">=</span> <span class="n">IBAN</span><span class="o">.</span><span class="na">valueOf</span><span class="o">(</span> <span class="kc">null</span> <span class="o">);</span> <span class="c1">// null</span>
@@ -53,11 +56,11 @@
     <span class="n">Collections</span><span class="o">.</span><span class="na">sort</span><span class="o">(</span> <span class="n">ibans</span><span class="o">,</span> <span class="n">IBAN</span><span class="o">.</span><span class="na">LEXICAL_ORDER</span> <span class="o">);</span>
 
     <span class="c1">// You can use the Modulo97 class directly to compute or verify check digits.</span>
-    <span class="n">String</span> <span class="n">candidate</span> <span class="o">=</span> <span class="s">"NL91ABNA0417164300"</span><span class="o">;</span>
+    <span class="n">String</span> <span class="n">candidate</span> <span class="o">=</span> <span class="s">"GB29 NWBK 6016 1331 9268 19"</span><span class="o">;</span>
     <span class="n">Modulo97</span><span class="o">.</span><span class="na">verifyCheckDigits</span><span class="o">(</span> <span class="n">candidate</span> <span class="o">);</span>
 
     <span class="c1">// Modulo97 API methods take CharSequence, not just String.</span>
-    <span class="n">StringBuilder</span> <span class="n">builder</span> <span class="o">=</span> <span class="k">new</span> <span class="n">StringBuilder</span><span class="o">(</span> <span class="s">"NL00ABNA0417164300"</span> <span class="o">);</span>
+    <span class="n">StringBuilder</span> <span class="n">builder</span> <span class="o">=</span> <span class="k">new</span> <span class="n">StringBuilder</span><span class="o">(</span> <span class="s">"LU280019400644750000"</span> <span class="o">);</span>
     <span class="kt">int</span> <span class="n">checkDigits</span> <span class="o">=</span> <span class="n">Modulo97</span><span class="o">.</span><span class="na">calculateCheckDigits</span><span class="o">(</span> <span class="n">builder</span> <span class="o">);</span>
 </pre></div>
 
@@ -65,7 +68,7 @@
 
 <ul>
 <li>The length of an IBAN is checked against the required length for its country code. Other country-specific validation (e.g. national check digits) are absent.</li>
-<li>The <code>IBAN</code> class does not implement Serializable, because the string representation is a superior serialized form. More compact, more portable.</li>
+<li>The <code>IBAN</code> class does not implement <code>Serializable</code>, because the string representation is a superior serialized form. More compact, more portable.</li>
 </ul><h2>References</h2>
 
 <ul>
@@ -88,12 +91,17 @@
    limitations under the License.
 </code></pre>
       </section>
-      <footer>
-        <p>This project is maintained by <a href="https://github.com/barend">barend</a></p>
-        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">Java-iban maintained by <a href="https://github.com/barend">barend</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
       </footer>
     </div>
-    <script src="javascripts/scale.fix.js"></script>
+
     
+
   </body>
 </html>
