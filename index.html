@@ -4,11 +4,11 @@
   <head>
     <meta charset='utf-8' />
     <meta http-equiv="X-UA-Compatible" content="chrome=1" />
-    <meta name="description" content="Java-iban : An Apache licensed, immutable Java value type for IBAN's." />
+    <meta name="description" content="Java-IBAN : A small Java library for dealing with International Bank Account Numbers (IBANs)." />
 
     <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
 
-    <title>Java-iban</title>
+    <title>Java-IBAN</title>
   </head>
 
   <body>
@@ -18,8 +18,8 @@
         <header class="inner">
           <a id="forkme_banner" href="https://github.com/barend/java-iban">View on GitHub</a>
 
-          <h1 id="project_title">Java-iban</h1>
-          <h2 id="project_tagline">An Apache licensed, immutable Java value type for IBAN's.</h2>
+          <h1 id="project_title">Java-IBAN</h1>
+          <h2 id="project_tagline">A small Java library for dealing with International Bank Account Numbers (IBANs).</h2>
 
             <section id="downloads">
               <a class="zip_download_link" href="https://github.com/barend/java-iban/zipball/master">Download this project as a .zip file</a>
@@ -31,14 +31,43 @@
     <!-- MAIN CONTENT -->
     <div id="main_content_wrap" class="outer">
       <section id="main_content" class="inner">
-        <p>An Apache licensed, immutable Java value type for IBAN's.</p>
+        <p>The <code>IBAN</code> class is intended for use in your domain types. <code>IBAN</code> objects enforce that their value is the correct length
+for its country code and that it passes checksum validation. The <code>Modulo97</code> class exposes the checksum validation code
+for other purposes, such as live input validation.</p>
 
-<h2>Usage</h2>
+<h3>
+<a name="install" class="anchor" href="#install"><span class="octicon octicon-link"></span></a>Install</h3>
+
+<p>Grab a package from Github or get it from Maven Central:</p>
+
+<h4>
+<a name="maven" class="anchor" href="#maven"><span class="octicon octicon-link"></span></a>Maven</h4>
+
+<div class="highlight"><pre>    <span class="nt">&lt;dependency&gt;</span>
+        <span class="nt">&lt;groupId&gt;</span>nl.garvelink.oss<span class="nt">&lt;/groupId&gt;</span>
+        <span class="nt">&lt;artifactId&gt;</span>iban<span class="nt">&lt;/artifactId&gt;</span>
+        <span class="nt">&lt;version&gt;</span>1.0.0<span class="nt">&lt;/version&gt;</span>
+    <span class="nt">&lt;/dependency&gt;</span>
+</pre></div>
+
+<h4>
+<a name="gradle" class="anchor" href="#gradle"><span class="octicon octicon-link"></span></a>Gradle</h4>
+
+<div class="highlight"><pre>    <span class="nx">dependencies</span> <span class="p">{</span>
+        <span class="nx">compile</span> <span class="s1">'nl.garvelink.oss:iban:1.0.0'</span>
+    <span class="p">}</span>
+</pre></div>
+
+<h3>
+<a name="use" class="anchor" href="#use"><span class="octicon octicon-link"></span></a>Use</h3>
+
+<p>Obtain an <code>IBAN</code> instance using one of the static factory methods: <code>valueOf( )</code> and <code>parse( )</code>. Methods throw
+<code>java.lang.IllegalArgumentException</code> on invalid input.</p>
 
 <div class="highlight"><pre>    <span class="c1">// Obtain an instance of IBAN.</span>
     <span class="n">IBAN</span> <span class="n">iban</span> <span class="o">=</span> <span class="n">IBAN</span><span class="o">.</span><span class="na">valueOf</span><span class="o">(</span> <span class="s">"NL91ABNA0417164300"</span> <span class="o">);</span>
 
-    <span class="c1">// toString() emits standard formatting, toPlainString() is terse.</span>
+    <span class="c1">// toString() emits standard formatting, toPlainString() is compact.</span>
     <span class="n">String</span> <span class="n">s</span> <span class="o">=</span> <span class="n">iban</span><span class="o">.</span><span class="na">toString</span><span class="o">();</span> <span class="c1">// "NL91 ABNA 0417 1643 00"</span>
     <span class="n">String</span> <span class="n">p</span> <span class="o">=</span> <span class="n">iban</span><span class="o">.</span><span class="na">toPlainString</span><span class="o">();</span> <span class="c1">// "NL91ABNA0417164300"</span>
 
@@ -46,35 +75,46 @@
     <span class="n">iban</span> <span class="o">=</span> <span class="n">IBAN</span><span class="o">.</span><span class="na">valueOf</span><span class="o">(</span> <span class="s">"BE68 5390 0754 7034"</span> <span class="o">);</span>
 
     <span class="c1">// The valueOf() method returns null if its argument is null.</span>
-    <span class="n">iban</span> <span class="o">=</span> <span class="n">IBAN</span><span class="o">.</span><span class="na">valueOf</span><span class="o">(</span> <span class="kc">null</span> <span class="o">);</span> <span class="c1">// null</span>
+    <span class="n">iban</span><span class="o">.</span><span class="na">valueOf</span><span class="o">(</span> <span class="kc">null</span> <span class="o">);</span> <span class="c1">// null</span>
 
     <span class="c1">// The parse() method throws an exception if its argument is null.</span>
-    <span class="n">iban</span> <span class="o">=</span> <span class="n">IBAN</span><span class="o">.</span><span class="na">parse</span><span class="o">(</span> <span class="kc">null</span> <span class="o">);</span> <span class="c1">// Kaboom.</span>
+    <span class="n">iban</span><span class="o">.</span><span class="na">parse</span><span class="o">(</span> <span class="kc">null</span> <span class="o">);</span> <span class="c1">// IllegalArgumentException</span>
 
     <span class="c1">// IBAN does not implement Comparable&lt;T&gt;, but a simple Comparator is provided.</span>
     <span class="n">List</span><span class="o">&lt;</span><span class="n">IBAN</span><span class="o">&gt;</span> <span class="n">ibans</span> <span class="o">=</span> <span class="n">getListOfIBANs</span><span class="o">();</span>
     <span class="n">Collections</span><span class="o">.</span><span class="na">sort</span><span class="o">(</span> <span class="n">ibans</span><span class="o">,</span> <span class="n">IBAN</span><span class="o">.</span><span class="na">LEXICAL_ORDER</span> <span class="o">);</span>
 
-    <span class="c1">// You can use the Modulo97 class directly to compute or verify check digits.</span>
+    <span class="c1">// The equals() and hashCode() methods are implemented.</span>
+    <span class="n">Map</span><span class="o">&lt;</span><span class="n">IBAN</span><span class="o">,</span> <span class="n">String</span><span class="o">&gt;</span> <span class="n">ibansAsKeys</span> <span class="o">=</span> <span class="n">Maps</span><span class="o">.</span><span class="na">newHashMap</span><span class="o">();</span>
+    <span class="n">ibansAsKeys</span><span class="o">.</span><span class="na">put</span><span class="o">(</span> <span class="n">iban</span><span class="o">,</span> <span class="s">"this is fine"</span> <span class="o">);</span>
+
+    <span class="c1">// You can use the Modulo97 class directly to compute or verify the check digits on an input.</span>
     <span class="n">String</span> <span class="n">candidate</span> <span class="o">=</span> <span class="s">"GB29 NWBK 6016 1331 9268 19"</span><span class="o">;</span>
-    <span class="n">Modulo97</span><span class="o">.</span><span class="na">verifyCheckDigits</span><span class="o">(</span> <span class="n">candidate</span> <span class="o">);</span>
+    <span class="kt">boolean</span> <span class="n">valid</span> <span class="o">=</span> <span class="n">Modulo97</span><span class="o">.</span><span class="na">verifyCheckDigits</span><span class="o">(</span> <span class="n">candidate</span> <span class="o">);</span> <span class="c1">// true</span>
 
     <span class="c1">// Modulo97 API methods take CharSequence, not just String.</span>
-    <span class="n">StringBuilder</span> <span class="n">builder</span> <span class="o">=</span> <span class="k">new</span> <span class="n">StringBuilder</span><span class="o">(</span> <span class="s">"LU280019400644750000"</span> <span class="o">);</span>
-    <span class="kt">int</span> <span class="n">checkDigits</span> <span class="o">=</span> <span class="n">Modulo97</span><span class="o">.</span><span class="na">calculateCheckDigits</span><span class="o">(</span> <span class="n">builder</span> <span class="o">);</span>
+    <span class="n">StringBuilder</span> <span class="n">builder</span> <span class="o">=</span> <span class="k">new</span> <span class="n">StringBuilder</span><span class="o">(</span> <span class="s">"LU000019400644750000"</span> <span class="o">);</span>
+    <span class="kt">int</span> <span class="n">checkDigits</span> <span class="o">=</span> <span class="n">Modulo97</span><span class="o">.</span><span class="na">calculateCheckDigits</span><span class="o">(</span> <span class="n">builder</span> <span class="o">);</span> <span class="c1">// 28</span>
+
+    <span class="c1">// Get the expected IBAN length for a country code:</span>
+    <span class="kt">int</span> <span class="n">length</span> <span class="o">=</span> <span class="n">IBAN</span><span class="o">.</span><span class="na">getLengthForCountryCode</span><span class="o">(</span> <span class="s">"DK"</span> <span class="o">);</span>
 </pre></div>
 
-<h2>Notes</h2>
+<h3>
+<a name="notes" class="anchor" href="#notes"><span class="octicon octicon-link"></span></a>Notes</h3>
 
 <ul>
-<li>The length of an IBAN is checked against the required length for its country code. Other country-specific validation (e.g. national check digits) are absent.</li>
-<li>The <code>IBAN</code> class does not implement <code>Serializable</code>, because the string representation is a superior serialized form. More compact, more portable.</li>
-</ul><h2>References</h2>
+<li>The length of an IBAN is checked against the required length for its country code. Other country-specific
+validation (e.g. national check digits) is absent.</li>
+<li>The <code>IBAN</code> class does not implement <code>Serializable</code>, because the string representation is a superior serialized form.</li>
+</ul><h3>
+<a name="references" class="anchor" href="#references"><span class="octicon octicon-link"></span></a>References</h3>
 
 <ul>
 <li><a href="http://en.wikipedia.org/wiki/IBAN">http://en.wikipedia.org/wiki/IBAN</a></li>
 <li><a href="http://www.ecbs.org/iban.htm">http://www.ecbs.org/iban.htm</a></li>
-</ul><h2>Copyright and License</h2>
+</ul><h3>
+<a name="copyright-and-license" class="anchor" href="#copyright-and-license"><span class="octicon octicon-link"></span></a>Copyright and License</h3>
 
 <p>Copyright 2013 Barend Garvelink</p>
 
@@ -96,7 +136,7 @@
     <!-- FOOTER  -->
     <div id="footer_wrap" class="outer">
       <footer class="inner">
-        <p class="copyright">Java-iban maintained by <a href="https://github.com/barend">barend</a></p>
+        <p class="copyright">Java-IBAN maintained by <a href="https://github.com/barend">barend</a></p>
         <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
       </footer>
     </div>
