@@ -31,19 +31,23 @@
     <!-- MAIN CONTENT -->
     <div id="main_content_wrap" class="outer">
       <section id="main_content" class="inner">
-        <p>The <code>IBAN</code> class is intended for use in your domain types. <code>IBAN</code> objects enforce that their value is the correct length
+        <p>A small Java library for dealing with International Bank Account Numbers (IBANs).</p>
+
+<p>The <code>IBAN</code> class is intended for use in your domain types. <code>IBAN</code> objects enforce that their value is the correct length
 for its country code and that it passes checksum validation. The <code>Modulo97</code> class exposes the checksum validation code
 for other purposes, such as live input validation.</p>
+
+<p>The library is compatible for use in Android apps.</p>
 
 <h3>
 <a name="install" class="anchor" href="#install"><span class="octicon octicon-link"></span></a>Install</h3>
 
-<p>Grab a package from Github or get it from Maven Central:</p>
+<p>Grab a package <a href="https://github.com/barend/java-iban/releases">from Github</a> or get it from Maven Central:</p>
 
 <h4>
 <a name="maven" class="anchor" href="#maven"><span class="octicon octicon-link"></span></a>Maven</h4>
 
-<div class="highlight"><pre>    <span class="nt">&lt;dependency&gt;</span>
+<div class="highlight highlight-xml"><pre>    <span class="nt">&lt;dependency&gt;</span>
         <span class="nt">&lt;groupId&gt;</span>nl.garvelink.oss<span class="nt">&lt;/groupId&gt;</span>
         <span class="nt">&lt;artifactId&gt;</span>iban<span class="nt">&lt;/artifactId&gt;</span>
         <span class="nt">&lt;version&gt;</span>1.0.0<span class="nt">&lt;/version&gt;</span>
@@ -53,8 +57,8 @@ for other purposes, such as live input validation.</p>
 <h4>
 <a name="gradle" class="anchor" href="#gradle"><span class="octicon octicon-link"></span></a>Gradle</h4>
 
-<div class="highlight"><pre>    <span class="nx">dependencies</span> <span class="p">{</span>
-        <span class="nx">compile</span> <span class="s1">'nl.garvelink.oss:iban:1.0.0'</span>
+<div class="highlight highlight-javascript"><pre>    <span class="nx">dependencies</span> <span class="p">{</span>
+        <span class="nx">compile</span> <span class="s1">'nl.garvelink.oss:iban:1.1.0'</span>
     <span class="p">}</span>
 </pre></div>
 
@@ -64,7 +68,7 @@ for other purposes, such as live input validation.</p>
 <p>Obtain an <code>IBAN</code> instance using one of the static factory methods: <code>valueOf( )</code> and <code>parse( )</code>. Methods throw
 <code>java.lang.IllegalArgumentException</code> on invalid input.</p>
 
-<div class="highlight"><pre>    <span class="c1">// Obtain an instance of IBAN.</span>
+<div class="highlight highlight-java"><pre>    <span class="c1">// Obtain an instance of IBAN.</span>
     <span class="n">IBAN</span> <span class="n">iban</span> <span class="o">=</span> <span class="n">IBAN</span><span class="o">.</span><span class="na">valueOf</span><span class="o">(</span> <span class="s">"NL91ABNA0417164300"</span> <span class="o">);</span>
 
     <span class="c1">// toString() emits standard formatting, toPlainString() is compact.</span>
@@ -97,7 +101,7 @@ for other purposes, such as live input validation.</p>
     <span class="kt">int</span> <span class="n">checkDigits</span> <span class="o">=</span> <span class="n">Modulo97</span><span class="o">.</span><span class="na">calculateCheckDigits</span><span class="o">(</span> <span class="n">builder</span> <span class="o">);</span> <span class="c1">// 28</span>
 
     <span class="c1">// Get the expected IBAN length for a country code:</span>
-    <span class="kt">int</span> <span class="n">length</span> <span class="o">=</span> <span class="n">IBAN</span><span class="o">.</span><span class="na">getLengthForCountryCode</span><span class="o">(</span> <span class="s">"DK"</span> <span class="o">);</span>
+    <span class="kt">int</span> <span class="n">length</span> <span class="o">=</span> <span class="n">CountryCodes</span><span class="o">.</span><span class="na">getLengthForCountryCode</span><span class="o">(</span> <span class="s">"DK"</span> <span class="o">);</span>
 </pre></div>
 
 <h3>
@@ -108,11 +112,53 @@ for other purposes, such as live input validation.</p>
 validation (e.g. national check digits) is absent.</li>
 <li>The <code>IBAN</code> class does not implement <code>Serializable</code>, because the string representation is a superior serialized form.</li>
 </ul><h3>
+<a name="version-history" class="anchor" href="#version-history"><span class="octicon octicon-link"></span></a>Version history</h3>
+
+<h4>
+<a name="11-october-25th-2013" class="anchor" href="#11-october-25th-2013"><span class="octicon octicon-link"></span></a>1.1: October 25th, 2013</h4>
+
+<ul>
+<li>Moves country information from <code>IBAN</code> into separate class <code>CountryCodes</code>
+</li>
+<li>The known country codes can be obtained from <code>CountryCodes.getKnownCountryCodes()</code>.</li>
+<li>The method <code>getLengthForCountryCode()</code> in <code>IBAN</code> is now deprecated, having moved into <code>CountryCodes</code>.</li>
+<li>Adds length validation rules for:
+
+<ul>
+<li>Albania, Algeria, Angola, Azerbaijan, Bahrein, Benin, Brazil, British Virgin Islands, Burkina Faso,
+Burundi, Cameroon, Cape Verde, Congo, Costa Rica, Dominican Republic, Egypt, Faroe Islands, Gabon,
+Georgia, Greenland, Guatemala, Iran, Ivory Coast, Kazakhstan, Kuwait, Lebanon, Madagascar, Mali,
+Mauritania, Moldova, Mozambique, Pakistan, State of Palestine / Palestinian Territories, Saudi Arabia,
+Senegal, Tunisia, Ukraine, United Arab Emirates</li>
+<li>
+<strong>Note:</strong> this list is not limited to SEPA countries or even the IBAN registry maintained by SWIFT. The
+<code>CountryCodesParameterizedTest.java</code> file documents the origin for each of these IBAN specs.</li>
+</ul>
+</li>
+</ul><h4>
+<a name="10-may-30-2013" class="anchor" href="#10-may-30-2013"><span class="octicon octicon-link"></span></a>1.0: May 30, 2013</h4>
+
+<ul>
+<li>Initial release, IBAN value type.</li>
+<li>Supported countries:
+
+<ul>
+<li>Andorra, Austria, Belgium, Bosnia and Herzegovinia, Bulgaria, Croatia, Cyprus, Czech Republic,
+Denmark, Estonia, Finland, France, Germany, Gibraltar, Greece, Hungary, Iceland, Ireland,
+Israel, Italy, Latvia, Liechtenstein, Lithuania, Luxembourg, Macedonia, Malta, Mauritius, Monaco,
+Montenegro, Netherlands, Norway, Poland, Portugal, Romania, San Marino, Serbia, Slovakia, Slovenia,
+Spain, Sweden, Switzerland, Turkey, United Kingdom</li>
+</ul>
+</li>
+</ul><h3>
 <a name="references" class="anchor" href="#references"><span class="octicon octicon-link"></span></a>References</h3>
 
 <ul>
+<li><a href="http://www.swift.com/dsp/resources/documents/IBAN_Registry.pdf">http://www.swift.com/dsp/resources/documents/IBAN_Registry.pdf</a></li>
 <li><a href="http://en.wikipedia.org/wiki/IBAN">http://en.wikipedia.org/wiki/IBAN</a></li>
 <li><a href="http://www.ecbs.org/iban.htm">http://www.ecbs.org/iban.htm</a></li>
+<li><a href="http://www.tbg5-finance.org/ibanabout.shtml">http://www.tbg5-finance.org/ibanabout.shtml</a></li>
+<li><a href="http://www.nordea.com/Our+services/International+products+and+services/Cash+Management/IBAN+countries/908462.html">http://www.nordea.com/Our+services/International+products+and+services/Cash+Management/IBAN+countries/908462.html</a></li>
 </ul><h3>
 <a name="copyright-and-license" class="anchor" href="#copyright-and-license"><span class="octicon octicon-link"></span></a>Copyright and License</h3>
 
